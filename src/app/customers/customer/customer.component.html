@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <form (ngSubmit)="save()" [formGroup]="customerForm">
+        <div class="form-group">
+          <label for="firstNameId">First Name</label>
+          <input type="text" id="firstNameId" class="form-control" placeholder="First Name .." required formControlName="firstName">
+          <div *ngIf="customerForm.get('firstName').touched && customerForm.get('firstName').errors">
+            <span class="alert alert-warning">
+              First name is required! :)
+            </span>
+          </div>
+        </div>
+        <input type="submit" value="Save" class="btn btn-primary">
+      </form>
+      {{ customerForm.get('firstName').errors | json }}
+    </div>
+  </div>
+</div>
