@@ -23,13 +23,30 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="emailId">Email</label>
-          <input type="email" id="emailId" class="form-control" placeholder="email .." formControlName="email">
-          <div *ngIf="customerForm.get('email').touched && customerForm.get('email').errors">
-            <span class="alert alert-warning">
-              Email is required! :)
-            </span>
+        <div formGroupName="emailGroup">
+          <div class="form-group">
+            <label for="emailId">Email</label>
+            <input type="email" id="emailId" class="form-control" placeholder="email .." formControlName="email">
+            <div *ngIf="customerForm.get('emailGroup.email').touched && customerForm.get('emailGroup.email').errors">
+              <span class="alert alert-warning">
+                Email is required! :)
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmEmailId">Confirm Email</label>
+            <input type="email" id="confirmEmailId" class="form-control" placeholder="repeat email .." formControlName="confirmEmail">
+            <div *ngIf="customerForm.get('emailGroup.confirmEmail').touched && customerForm.get('emailGroup.confirmEmail').errors">
+              <span class="alert alert-warning">
+                Repeated email is required! :)
+              </span>
+            </div>
+            <div *ngIf="customerForm.get('emailGroup.confirmEmail').touched && customerForm.get('emailGroup').errors?.match">
+                <span class="alert alert-warning">
+                  Emails do not match. :)
+                </span>
+              </div>
           </div>
         </div>
 
@@ -72,7 +89,9 @@
 
         <input type="submit" value="Save" class="btn btn-primary" [disabled]="customerForm.invalid">
       </form>
-      {{ customerForm.get('firstName').errors | json }}
+      {{ customerForm.value | json }}
+      <!-- <br> -->
+      <!-- {{ customerForm.get('emailGroup').errors | json }} -->
     </div>
   </div>
 </div>

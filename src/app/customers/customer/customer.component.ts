@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
 import { ratingRange } from './rating-range.validator';
+import { emailMatcher } from './email-matcher.validator';
 
 @Component({
   selector: 'arf-customer',
@@ -17,7 +18,10 @@ export class CustomerComponent implements OnInit {
     this.customerForm = this.fb.group({
       firstName: ['', [ Validators.required, Validators.minLength(3) ]],
       lastName: ['', [ Validators.required, Validators.maxLength(20) ]],
-      email: '',
+      emailGroup: this.fb.group({
+        email: ['', [ Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9-.]+') ]],
+        confirmEmail: ['', [ Validators.required ]],
+      }, { validator: emailMatcher}),
       phone: '',
       notify: 'email',
       rating: ['', ratingRange(1, 5)],
