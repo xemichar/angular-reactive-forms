@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'arf-customer',
@@ -11,25 +11,35 @@ export class CustomerComponent implements OnInit {
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    // one way of making reactive form
-    // this.customerForm = new FormGroup({
-    //   firstName: new FormControl(),
-    //   lastName: new FormControl(),
-    //   email: new FormControl(),
-    //   sendCatalog: new FormControl(true)
-    // });
-
-    // another one
+    
     this.customerForm = this.fb.group({
-      firstName: '',
-      lastName: '',
+      firstName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3)
+        ]
+      ],
+      lastName: ['', [ Validators.required, Validators.maxLength(20) ]],
       email: '',
+      phone: '',
+      notify: 'email',
       showCatalog: true
     });
 
   }
 
-  save() : void {
+  setNotification(notifyVia: string): void {
+    const phoneControl = this.customerForm.get('phone');
+    if ( notifyVia === 'text' ) {
+      phoneControl.setValidators(Validators.required)
+    } else {
+      phoneControl.clearValidators();
+    }
+    phoneControl.updateValueAndValidity();
+  }
+
+  save(): void {
     console.log(this.customerForm);
   }
 
