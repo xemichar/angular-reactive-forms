@@ -20,7 +20,7 @@ export class CustomerComponent implements OnInit {
       email: '',
       phone: '',
       notify: 'email',
-      rating: ['', ratingRange],
+      rating: ['', ratingRange(1, 5)],
       showCatalog: true
     });
 
