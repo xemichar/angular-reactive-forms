@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
+import { ratingRange } from './rating-range.validator';
+
 @Component({
   selector: 'arf-customer',
   templateUrl: './customer.component.html',
@@ -11,19 +13,14 @@ export class CustomerComponent implements OnInit {
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    
+
     this.customerForm = this.fb.group({
-      firstName: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(3)
-        ]
-      ],
+      firstName: ['', [ Validators.required, Validators.minLength(3) ]],
       lastName: ['', [ Validators.required, Validators.maxLength(20) ]],
       email: '',
       phone: '',
       notify: 'email',
+      rating: ['', ratingRange],
       showCatalog: true
     });
 
