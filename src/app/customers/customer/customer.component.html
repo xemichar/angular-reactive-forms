@@ -85,7 +85,40 @@
           <label class="form-check-label" for="showCatalogId">Show catalog</label>
         </div>
 
-        <br>
+        <div *ngIf="customerForm.get('showCatalog').value">
+          <div formGroupName="addresses">
+
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="" formControlName="addressType" value="home">
+              <label class="form-check-label" for="">Address home</label>
+            </div>
+
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="" formControlName="addressType" value="work">
+              <label class="form-check-label" for="">Address work</label>
+            </div>
+
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="" formControlName="addressType" value="other">
+              <label class="form-check-label" for="">Address other</label>
+            </div>
+
+            <div class="form-group">
+              <label for="">Street 1</label>
+              <input class="form-control" type="text" id="" formControlName="street1">
+            </div>
+
+            <div class="form-group">
+              <label for="">Street 2</label>
+              <input class="form-control" type="text" id="" formControlName="street2">
+            </div>
+
+            <div class="form-group">
+              <label for="">Zip code</label>
+              <input class="form-control" type="text" id="" formControlName="zip">
+            </div>
+          </div>
+        </div>
 
         <input type="submit" value="Save" class="btn btn-primary" [disabled]="customerForm.invalid">
       </form>

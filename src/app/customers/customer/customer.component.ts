@@ -33,13 +33,23 @@ export class CustomerComponent implements OnInit {
       phone: '',
       notify: 'email',
       rating: ['', ratingRange(1, 5)],
-      showCatalog: true
+      showCatalog: true,
+      addresses: this.buildAddressBlock()
     });
 
     this.customerForm.get('notify').valueChanges.subscribe(value => this.setNotification(value));
 
     const emailControl = this.customerForm.get('emailGroup.email');
     emailControl.valueChanges.debounceTime(500).subscribe(value => this.setMessage(emailControl));
+  }
+
+  buildAddressBlock(): FormGroup {
+    return this.fb.group({
+      addressType: '',
+      street1: '',
+      street2: '',
+      zip: ''
+    })
   }
 
   setNotification(notifyVia: string): void {
@@ -58,7 +68,7 @@ export class CustomerComponent implements OnInit {
 
   setMessage(c: AbstractControl): void {
     this.emailMessage = '';
-    if ( (c.touched || c.dirty) && c.errors ) {
+    if ((c.touched || c.dirty) && c.errors) {
       this.emailMessage = Object.keys(c.errors).map(key =>
         this.validationMessages[key]).join(' ');
     }
