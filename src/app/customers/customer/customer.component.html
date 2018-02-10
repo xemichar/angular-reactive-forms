@@ -86,36 +86,40 @@
         </div>
 
         <div *ngIf="customerForm.get('showCatalog').value">
-          <div formGroupName="addresses">
+          <button class="btn btn-primary"(click)="addNewAddressBlock()" [disabled]="addresses.invalid">Add new address</button>
+          <div formArrayName="addresses" *ngFor="let address of addresses.controls; let i = index;">
+            <!-- bound to variable so we need [] -->
+            <div [formGroupName]="i">
 
-            <div class="form-check">
-              <input class="form-check-input" type="radio" id="" formControlName="addressType" value="home">
-              <label class="form-check-label" for="">Address home</label>
-            </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="{{ 'addressTypeId' + i }}" formControlName="addressType" value="home">
+                <label class="form-check-label" attr.for="{{ 'addressTypeId' + i }}" >Address home</label>
+              </div>
 
-            <div class="form-check">
-              <input class="form-check-input" type="radio" id="" formControlName="addressType" value="work">
-              <label class="form-check-label" for="">Address work</label>
-            </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="" formControlName="addressType" value="work">
+                <label class="form-check-label" for="">Address work</label>
+              </div>
 
-            <div class="form-check">
-              <input class="form-check-input" type="radio" id="" formControlName="addressType" value="other">
-              <label class="form-check-label" for="">Address other</label>
-            </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="" formControlName="addressType" value="other">
+                <label class="form-check-label" for="">Address other</label>
+              </div>
 
-            <div class="form-group">
-              <label for="">Street 1</label>
-              <input class="form-control" type="text" id="" formControlName="street1">
-            </div>
+              <div class="form-group">
+                <label for="">Street 1</label>
+                <input class="form-control" type="text" id="" formControlName="street1">
+              </div>
 
-            <div class="form-group">
-              <label for="">Street 2</label>
-              <input class="form-control" type="text" id="" formControlName="street2">
-            </div>
+              <div class="form-group">
+                <label for="">Street 2</label>
+                <input class="form-control" type="text" id="" formControlName="street2">
+              </div>
 
-            <div class="form-group">
-              <label for="">Zip code</label>
-              <input class="form-control" type="text" id="" formControlName="zip">
+              <div class="form-group">
+                <label for="">Zip code</label>
+                <input class="form-control" type="text" id="" formControlName="zip">
+              </div>
             </div>
           </div>
         </div>
@@ -123,8 +127,9 @@
         <input type="submit" value="Save" class="btn btn-primary" [disabled]="customerForm.invalid">
       </form>
       {{ customerForm.value | json }}
-      <!-- <br> -->
+      <br>
       <!-- {{ customerForm.get('emailGroup').errors | json }} -->
+      <!-- {{ addresses.get('0.street1')?.value }} -->
     </div>
   </div>
 </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';
 
 import { ratingRange } from './rating-range.validator';
 import { emailMatcher } from './email-matcher.validator';
@@ -19,6 +19,11 @@ export class CustomerComponent implements OnInit {
     pattern: 'Please enter a valid email address.'
   };
 
+  get addresses(): FormArray {
+    // we use cast operator <FormArray> to cast it to desired type, otherwise it's AbstractControl type
+    return <FormArray>this.customerForm.get('addresses')
+  }
+
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
@@ -34,13 +39,17 @@ export class CustomerComponent implements OnInit {
       notify: 'email',
       rating: ['', ratingRange(1, 5)],
       showCatalog: true,
-      addresses: this.buildAddressBlock()
+      addresses: this.fb.array([ this.buildAddressBlock() ])
     });
 
     this.customerForm.get('notify').valueChanges.subscribe(value => this.setNotification(value));
 
     const emailControl = this.customerForm.get('emailGroup.email');
     emailControl.valueChanges.debounceTime(500).subscribe(value => this.setMessage(emailControl));
+  }
+
+  addNewAddressBlock(): void {
+    this.addresses.push(this.buildAddressBlock());
   }
 
   buildAddressBlock(): FormGroup {
