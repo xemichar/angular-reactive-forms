@@ -1,0 +1,218 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-6">
+      <form (ngSubmit)="onFormSubmit()"
+            class="basic-form-border px-4 py-3 my-4"
+            [formGroup]="customerForm">
+        <h4 class="mb-3">Customer form</h4>
+
+        <div class="form-group">
+          <label for="firstNameId">First Name *</label>
+          <input type="text"
+                 id="firstNameId"
+                 class="form-control"
+                 placeholder="First Name .."
+                 formControlName="firstName">
+          <div *ngIf="customerForm.get('firstName').touched && customerForm.get('firstName').errors">
+            <span class="alert alert-warning">
+              First name is required! :)
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="lastNameId">Last Name *</label>
+          <input type="text"
+                 id="lastNameId"
+                 class="form-control"
+                 placeholder="Last Name .."
+                 formControlName="lastName">
+          <div *ngIf="customerForm.get('lastName').touched && customerForm.get('lastName').errors">
+            <span class="alert alert-warning">
+              Last name is required! :)
+            </span>
+          </div>
+        </div>
+
+        <div formGroupName="emailGroup">
+          <div class="form-group">
+            <label for="emailId">Email *</label>
+            <input type="email"
+                   id="emailId"
+                   class="form-control"
+                   placeholder="email .."
+                   formControlName="email">
+            <div *ngIf="emailMessage">
+              <span class="alert alert-warning">
+                {{ emailMessage }}
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmEmailId">Confirm Email *</label>
+            <input type="email"
+                   id="confirmEmailId"
+                   class="form-control"
+                   placeholder="repeat email .."
+                   formControlName="confirmEmail">
+            <div
+              *ngIf="customerForm.get('emailGroup.confirmEmail').touched && customerForm.get('emailGroup.confirmEmail').errors">
+              <span class="alert alert-warning">
+                Repeated email is required! :)
+              </span>
+            </div>
+            <div
+              *ngIf="customerForm.get('emailGroup.confirmEmail').touched && customerForm.get('emailGroup').errors?.match">
+              <span class="alert alert-warning">
+                Emails do not match. :)
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="phoneId">Phone *</label>
+          <input type="text"
+                 id="phoneId"
+                 class="form-control"
+                 placeholder="Phone number .."
+                 formControlName="phone">
+          <div *ngIf="customerForm.get('phone').touched && customerForm.get('phone').errors">
+            <span class="alert alert-warning">
+              Last name is required! :)
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-check">
+            <input class="form-check-input"
+                   type="radio"
+                   id="notifyEmailId"
+                   formControlName="notify"
+                   value="email">
+            <label class="form-check-label"
+                   for="notifyEmailId">Notify by email</label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input"
+                   type="radio"
+                   id="notifyPhoneId"
+                   formControlName="notify"
+                   value="text">
+            <label class="form-check-label"
+                   for="notifyPhoneId">Notify by text</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="ratingId">Rating</label>
+          <input type="number"
+                 id="ratingId"
+                 class="form-control"
+                 formControlName="rating">
+          <div *ngIf="customerForm.get('rating').touched && customerForm.get('rating').errors">
+            <span class="alert alert-warning"
+                  *ngIf="customerForm.get('rating').errors.range">
+              Rating is from 1- 5
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group form-check">
+          <input class="form-check-input"
+                 type="checkbox"
+                 value=""
+                 id="showCatalogId"
+                 formControlName="showCatalog">
+          <label class="form-check-label"
+                 for="showCatalogId">Show catalog</label>
+        </div>
+
+        <div *ngIf="customerForm.get('showCatalog').value">
+          <button class="btn btn-primary mb-3"
+                  (click)="addNewAddressBlock()"
+                  [disabled]="addresses.invalid">Add address +
+          </button>
+          <div formArrayName="addresses"
+               class="basic-form-border px-4 py-3 form-group"
+               *ngFor="let address of addresses.controls; let i = index;">
+            <!-- bound to variable so we need [] -->
+            <div [formGroupName]="i">
+
+              <div class="form-group">
+                <label>Address type *</label>
+                <div class="form-check">
+                  <input class="form-check-input"
+                         type="radio"
+                         [attr.id]="'address-home-' + i"
+                         formControlName="addressType"
+                         value="home">
+                  <label class="form-check-label"
+                         [attr.for]="'address-home-' + i">Home</label>
+                </div>
+
+                <div class="form-check">
+                  <input class="form-check-input"
+                         type="radio"
+                         [attr.id]="'address-work-' + i"
+                         formControlName="addressType"
+                         value="work">
+                  <label class="form-check-label"
+                         [attr.for]="'address-work-' + i">Work</label>
+                </div>
+
+                <div class="form-check">
+                  <input class="form-check-input"
+                         type="radio"
+                         [attr.id]="'address-other-' + i"
+                         formControlName="addressType"
+                         value="other">
+                  <label class="form-check-label"
+                         [attr.for]="'address-other-' + i">Other</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label [attr.for]="'street-1-' + i">Street 1</label>
+                <input class="form-control"
+                       type="text"
+                       [attr.id]="'street-1-' + i"
+                       formControlName="street1">
+              </div>
+
+              <div class="form-group">
+                <label [attr.for]="'street-2-' + i">Street 2</label>
+                <input class="form-control"
+                       type="text"
+                       [attr.id]="'street-2-' + i"
+                       formControlName="street2">
+              </div>
+
+              <div class="form-group">
+                <label [attr.for]="'zip-' + i">Zip code</label>
+                <input class="form-control"
+                       type="text"
+                       [attr.id]="'zip-' + i"
+                       formControlName="zip">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit"
+                class="btn btn-primary"
+                [disabled]="customerForm.invalid">Save customer
+        </button>
+      </form>
+
+      <button class="btn btn-link"
+              (click)="showJson = !showJson">
+        {{ showJson ? 'Hide' : 'Show' }} json {{ showJson ? '-' : '+' }}
+      </button>
+      <div *ngIf="showJson">{{ customerForm.value | json }}</div>
+    </div>
+  </div>
+</div>

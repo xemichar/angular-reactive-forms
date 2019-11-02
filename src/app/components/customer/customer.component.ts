@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';
-
-import { ratingRange } from './rating-range.validator';
-import { emailMatcher } from './email-matcher.validator';
-import 'rxjs/add/operator/debounceTime';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ratingRange } from '../../validators/rating-range.validator';
+import { emailMatcher } from '../../validators/email-matcher.validator';
+import { debounceTime, tap } from 'rxjs/operators';
 
 @Component({
-  selector: 'arf-customer',
+  selector: 'app-customer',
   templateUrl: './customer.component.html',
   styleUrls: ['./customer.component.scss']
 })
 export class CustomerComponent implements OnInit {
+  showJson: boolean;
   customerForm: FormGroup;
   emailMessage: string;
 
@@ -21,10 +21,11 @@ export class CustomerComponent implements OnInit {
 
   get addresses(): FormArray {
     // we use cast operator <FormArray> to cast it to desired type, otherwise it's AbstractControl type
-    return <FormArray>this.customerForm.get('addresses')
+    return this.customerForm.get('addresses') as FormArray;
   }
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder) {
+  }
 
   ngOnInit(): void {
 
@@ -33,19 +34,24 @@ export class CustomerComponent implements OnInit {
       lastName: ['', [Validators.required, Validators.maxLength(20)]],
       emailGroup: this.fb.group({
         email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9-.]+')]],
-        confirmEmail: ['', [Validators.required]],
+        confirmEmail: ['', [Validators.required]]
       }, { validator: emailMatcher }),
       phone: '',
       notify: 'email',
       rating: ['', ratingRange(1, 5)],
       showCatalog: true,
-      addresses: this.fb.array([ this.buildAddressBlock() ])
+      addresses: this.fb.array([this.buildAddressBlock()])
     });
 
     this.customerForm.get('notify').valueChanges.subscribe(value => this.setNotification(value));
 
     const emailControl = this.customerForm.get('emailGroup.email');
-    emailControl.valueChanges.debounceTime(500).subscribe(value => this.setMessage(emailControl));
+    emailControl.valueChanges
+      .pipe(
+        debounceTime(500),
+        tap(v => console.log(v))
+      )
+      .subscribe(() => this.setMessage(emailControl));
   }
 
   addNewAddressBlock(): void {
@@ -58,21 +64,21 @@ export class CustomerComponent implements OnInit {
       street1: '',
       street2: '',
       zip: ''
-    })
+    });
   }
 
   setNotification(notifyVia: string): void {
     const phoneControl = this.customerForm.get('phone');
     if (notifyVia === 'text') {
-      phoneControl.setValidators(Validators.required)
+      phoneControl.setValidators(Validators.required);
     } else {
       phoneControl.clearValidators();
     }
     phoneControl.updateValueAndValidity();
   }
 
-  save(): void {
-    console.log(this.customerForm);
+  onFormSubmit(): void {
+    console.log(this.customerForm.value);
   }
 
   setMessage(c: AbstractControl): void {
