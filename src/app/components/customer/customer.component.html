@@ -11,11 +11,11 @@
           <input type="text"
                  id="firstNameId"
                  class="form-control"
-                 placeholder="First Name .."
+                 placeholder="John"
                  formControlName="firstName">
           <div *ngIf="customerForm.get('firstName').touched && customerForm.get('firstName').errors">
-            <span class="alert alert-warning">
-              First name is required! :)
+            <span class="invalid-message">
+              First name is required.
             </span>
           </div>
         </div>
@@ -25,11 +25,11 @@
           <input type="text"
                  id="lastNameId"
                  class="form-control"
-                 placeholder="Last Name .."
+                 placeholder="Smith"
                  formControlName="lastName">
           <div *ngIf="customerForm.get('lastName').touched && customerForm.get('lastName').errors">
-            <span class="alert alert-warning">
-              Last name is required! :)
+            <span class="invalid-message">
+              Last name is required.
             </span>
           </div>
         </div>
@@ -40,10 +40,10 @@
             <input type="email"
                    id="emailId"
                    class="form-control"
-                   placeholder="email .."
+                   placeholder="example@gmail.com"
                    formControlName="email">
             <div *ngIf="emailMessage">
-              <span class="alert alert-warning">
+              <span class="invalid-message">
                 {{ emailMessage }}
               </span>
             </div>
@@ -54,18 +54,18 @@
             <input type="email"
                    id="confirmEmailId"
                    class="form-control"
-                   placeholder="repeat email .."
+                   placeholder="example@gmail.com"
                    formControlName="confirmEmail">
             <div
               *ngIf="customerForm.get('emailGroup.confirmEmail').touched && customerForm.get('emailGroup.confirmEmail').errors">
-              <span class="alert alert-warning">
-                Repeated email is required! :)
+              <span class="invalid-message">
+                Repeated email is required.
               </span>
             </div>
             <div
               *ngIf="customerForm.get('emailGroup.confirmEmail').touched && customerForm.get('emailGroup').errors?.match">
-              <span class="alert alert-warning">
-                Emails do not match. :)
+              <span class="invalid-message">
+                Emails do not match.
               </span>
             </div>
           </div>
@@ -76,11 +76,11 @@
           <input type="text"
                  id="phoneId"
                  class="form-control"
-                 placeholder="Phone number .."
+                 placeholder="+38267000000"
                  formControlName="phone">
           <div *ngIf="customerForm.get('phone').touched && customerForm.get('phone').errors">
-            <span class="alert alert-warning">
-              Last name is required! :)
+            <span class="invalid-message">
+              Phone is required.
             </span>
           </div>
         </div>
@@ -111,12 +111,13 @@
           <label for="ratingId">Rating</label>
           <input type="number"
                  id="ratingId"
+                 placeholder="5"
                  class="form-control"
                  formControlName="rating">
           <div *ngIf="customerForm.get('rating').touched && customerForm.get('rating').errors">
-            <span class="alert alert-warning"
+            <span class="invalid-message"
                   *ngIf="customerForm.get('rating').errors.range">
-              Rating is from 1- 5
+              Rating is from 1 - 5
             </span>
           </div>
         </div>
